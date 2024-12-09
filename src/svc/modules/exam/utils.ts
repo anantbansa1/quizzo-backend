@@ -85,6 +85,7 @@ export const getExamUtils = async (id: string, user: User) => {
       return question;
     }
     const { correctOptions, answerText, ...rest } = question;
+    console.log(correctOptions, answerText);
     return rest;
   });
 
@@ -118,11 +119,44 @@ export const attempExamUtils = async (
   await respRepo.save(examResponse);
 };
 
-export const getAllResults = async (id: string) => {};
+export const getAllResults = async (id: string) => {
+  const results = await respRepo.find({
+    where: {
+      exam: {
+        id: parseInt(id),
+      },
+    },
+  });
+  return results;
+};
 
-export const getFullResult = async (id: string, user: User) => {};
+export const getFullResult = async (id: string, user: User) => {
+  const results = await respRepo.find({
+    where: {
+      exam: {
+        id: parseInt(id),
+      },
+      user: {
+        id: user.id,
+      },
+    },
+  });
+  return results;
+};
 
-export const getResult = async (id: string, user: User) => {};
+export const getResult = async (id: string, user: User) => {
+  const results = await respRepo.find({
+    where: {
+      exam: {
+        id: parseInt(id),
+      },
+      user: {
+        id: user.id,
+      },
+    },
+  });
+  return results;
+};
 
 export const getAllExamsUtils = async (user: User) => {
   const userExams = await respRepo.find({

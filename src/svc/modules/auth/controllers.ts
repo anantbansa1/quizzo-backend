@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import {
+  IPayload,
   PostForgotPasswordRequest,
   PostLoginCredsRequest,
   PostResetPasswordRequest,
@@ -111,7 +112,7 @@ export const postForgotPassword = async (
 
   const token = generateForgotPasswordToken(email_id);
 
-  userRepository.save({ ...user, ResetPasswordToken: token });
+  await userRepository.save({ ...user, ResetPasswordToken: token });
 
   await sendForgotPasswordEmail(email_id, token);
   return response.status(200).json({
@@ -140,9 +141,9 @@ export const postResetPassword = async (
   const { token, password } = data;
   const hashedPassword = await getBcryptHash(password);
 
-  let payload: JwtPayload;
+  let payload: IPayload;
   try {
-    payload = jwt.verify(token, conf.JWT_SECRET_KEY || "my-secret") as JwtPayload;
+    payload = jwt.verify(token, conf.JWT_SECRET_KEY || "my-secret") as IPayload;
   } catch {
     response.status(401).json({
       message: "Invalid token",
@@ -178,7 +179,7 @@ export const postResetPassword = async (
     password: hashedPassword,
     resetPasswordToken: null,
   };
-  userRepository.save(updatedUser);
+  await userRepository.save(updatedUser);
   return response.status(200).json({
     status: "OK",
     message: "OK",
@@ -221,7 +222,7 @@ export const postSignup = async (
       emailId: email_id,
       name: name,
     };
-    userRepository.insert(updatedUser);
+    await userRepository.insert(updatedUser);
 
     return response.status(200).json({
       type: "OK",
@@ -267,7 +268,7 @@ export const updateDetails = async (
       institute: institute,
       name: name,
     };
-    userRepository.save(updatedUser);
+    await userRepository.save(updatedUser);
   } else {
     response.status(404).json({
       message: "user not found",

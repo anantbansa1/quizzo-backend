@@ -1,10 +1,11 @@
 // TODO: I don't think there is a need for a token model
+import { JwtPayload } from "jsonwebtoken";
 import { z } from "zod";
 import {
-  PostSignupSchema,
   PostForgotPasswordSchema,
   PostLoginCredsSchema,
   PostResetPasswordSchema,
+  PostSignupSchema,
   updateSchema,
 } from "~src/svc/modules/auth/schemas";
 
@@ -17,6 +18,10 @@ export interface IAuthenticationPayload {
   email_id: string;
   name: string;
   iad?: string;
+}
+
+export interface IPayload extends JwtPayload {
+  email_id: string;
 }
 
 export type PostLoginCredsRequest = z.infer<typeof PostLoginCredsSchema>;

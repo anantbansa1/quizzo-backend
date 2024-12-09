@@ -1,6 +1,5 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import * as core from "express-serve-static-core";
-import { SentryClient } from "~src/clients/sentry";
 
 export const asyncMiddleware =
   <
@@ -21,7 +20,6 @@ export const asyncMiddleware =
     next: NextFunction,
   ) => {
     return Promise.resolve(asyncHandler(request, response, next)).catch((e) => {
-      SentryClient.captureException(e);
       next(e);
     });
   };

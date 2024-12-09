@@ -19,15 +19,15 @@ import {
   UpdateExamRequest,
 } from "~src/svc/modules/exam/types";
 import {
-  createExamUtil,
-  updateExamUtils,
-  getExamUtils,
   attempExamUtils,
+  createExamUtil,
+  deleteExamUtils,
+  getAllExamsUtils,
   getAllResults,
+  getExamUtils,
   getFullResult,
   getResult,
-  getAllExamsUtils,
-  deleteExamUtils,
+  updateExamUtils,
 } from "~src/svc/modules/exam/utils";
 
 export const createExam = async (

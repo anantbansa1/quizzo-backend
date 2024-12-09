@@ -1,8 +1,9 @@
 import { NextFunction, Request } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { conf } from "~src/config/settings";
-import { getUserByEmail } from "~src/svc/modules/users/utils";
+import { IPayload } from "~src/svc/modules/auth/types";
 import { AuthenticatedResponse } from "~src/svc/modules/common/types/http";
+import { User } from "~src/svc/modules/users";
 import { ALL_UNAUTHENTICATED_ROUTES } from "~src/svc/router";
 
 export const authenticationMiddleware = async (
@@ -16,17 +17,22 @@ export const authenticationMiddleware = async (
   }
 
   const token = request.headers.token as string;
-  let payload: JwtPayload;
+  let payload: IPayload;
   try {
-    payload = jwt.verify(token, conf.JWT_SECRET_KEY || "my-secret") as JwtPayload;
+    payload = jwt.verify(token, conf.JWT_SECRET_KEY || "my-secret") as IPayload;
   } catch {
     response.status(401).json({
       message: "Invalid token",
     });
     return;
   }
+  const userRepo = conf.DEFAULT_DATA_SOURCE.getRepository(User);
+  const user = await userRepo.findOne({
+    where: {
+      emailId: payload.email_id,
+    },
+  });
 
-  const user = await getUserByEmail(payload.email_id as string);
   if (!user) {
     response.status(401).json({
       message: "User does not exist",

@@ -1,12 +1,12 @@
-import { attempt } from "bluebird";
 import express from "express";
 import {
+  attempt,
   createExam,
-  updateExam,
+  deleteExam,
+  getAllExams,
   getExam,
   getResults,
-  getAllExams,
-  deleteExam,
+  updateExam,
 } from "~src/svc/modules/exam/controllers";
 
 export const examRouter = express.Router();

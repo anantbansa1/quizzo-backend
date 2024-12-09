@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/node";
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
@@ -26,8 +25,6 @@ export const createServer = async () => {
 
   server.use(router);
 
-  // Use Sentry error handler before all error middlewares
-  server.use(Sentry.expressErrorHandler());
   server.use(internalServerErrorMiddleware);
 
   return server;

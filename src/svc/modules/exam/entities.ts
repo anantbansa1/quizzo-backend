@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, OneToMany } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { Metadata } from "~src/svc/modules/common/entities/metadata";
 import {
   IAdditionalQuestions,

@@ -15,10 +15,10 @@ export class Exam extends Metadata {
   @Column({ type: "varchar" })
   title!: string;
 
-  @Column({ type: "datetime" })
+  @Column({ type: "timestamp" })
   startTime!: Date;
 
-  @Column({ type: "datetime" })
+  @Column({ type: "timestamp" })
   duration!: number;
 
   @Column({ type: "boolean", default: false })

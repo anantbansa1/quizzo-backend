@@ -5,13 +5,11 @@ import { ForgotPasswordEmail, SignupEmail } from "~src/svc/modules/auth/constant
 import { EmailClient } from "~src/clients/email";
 
 export const generateToken = (email_id: string, name: string, role: string) => {
-  let payload: IAuthenticationPayload = {
+  const payload: IAuthenticationPayload = {
     email_id: email_id,
     name: name,
+    role: role,
   };
-  if (role) {
-    payload = { ...payload, iad: "IAD" };
-  }
 
   const options = { expiresIn: parseInt(conf.JWT_EXPIRES_IN) * 30 || "30d" };
   return jwt.sign(payload, conf.JWT_SECRET_KEY, options);

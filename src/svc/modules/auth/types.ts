@@ -17,7 +17,7 @@ export interface IToken {
 export interface IAuthenticationPayload {
   email_id: string;
   name: string;
-  iad?: string;
+  role: string;
 }
 
 export interface IPayload extends JwtPayload {

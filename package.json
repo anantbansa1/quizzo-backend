@@ -13,7 +13,7 @@
     "lint-fix": "eslint --fix --ext .ts,.tsx .",
     "pretty": "npx prettier --write .",
     "pretty-check": "npx prettier --check .",
-    "serve": "node --env-file=.env dist/index.js",
+    "serve": "node dist/index.js",
     "start": "npm run serve",
     "dev": "nodemon",
     "prepare": "husky",

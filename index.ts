@@ -1,9 +1,11 @@
+import dotenv from "dotenv";
 // eslint-disable-next-line import/first
 import { conf } from "~src/config/settings";
 // eslint-disable-next-line import/first
 import { createServer } from "~src/svc/server";
 
-const port = conf.PORT;
+dotenv.config();
+const port = conf.PORT || 4000;
 
 const startServer = async () => {
   try {

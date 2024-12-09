@@ -1,6 +1,9 @@
+import dotenv from "dotenv";
 import { DataSource, DataSourceOptions } from "typeorm";
 import { Exam, ExamResponse } from "~src/svc/modules/exam/entities";
 import { User } from "~src/svc/modules/users";
+
+dotenv.config();
 
 const config: DataSourceOptions = {
   type: "postgres",

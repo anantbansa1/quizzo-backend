@@ -1,6 +1,9 @@
 import * as process from "node:process";
+import dotenv from "dotenv";
 import defaultDataSource from "~src/config/ormconfig.pgap";
 import { Config } from "~src/config/types";
+
+dotenv.config();
 
 export const conf: Config = {
   FRONTEND_URL: process.env.FRONTEND_URL,

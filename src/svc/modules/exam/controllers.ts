@@ -95,7 +95,7 @@ export const getExam = async (
 ) => {
   let data: GetExamRequest;
   try {
-    data = GetExamSchema.parse(request.body);
+    data = GetExamSchema.parse(request.query);
   } catch (e: unknown) {
     response.status(400).json({
       message: "Data validation failed",
@@ -182,7 +182,7 @@ export const getResults = async (
 ) => {
   let data: GetResultRequest;
   try {
-    data = GetResultSchema.parse(request.body);
+    data = GetResultSchema.parse(request.query);
   } catch (e: unknown) {
     response.status(400).json({
       message: "Data validation failed",

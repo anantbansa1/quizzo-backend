@@ -162,9 +162,15 @@ export const attempt = async (
     return;
   }
 
-  await attempExamUtils(data.responses, data.additionalResponse, exam, user);
+  const resp = await attempExamUtils(
+    data.responses,
+    data.additionalResponse,
+    exam,
+    user,
+  );
   response.status(200).json({
     message: "exam attempted succssfully",
+    date: resp,
   });
   next();
 };

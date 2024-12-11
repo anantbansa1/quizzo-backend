@@ -111,10 +111,6 @@ export const attempExamUtils = async (
   const attemptedResponse = JSON.parse(responses) as IExamResponse[];
   const additionalAnswers = JSON.parse(additionalResponse) as IAdditionalAnswers[];
 
-  if (!exam) {
-    throw new Error("Exam not found");
-  }
-
   let examResponse = await respRepo.findOne({
     where: {
       user: user,
@@ -134,7 +130,8 @@ export const attempExamUtils = async (
     });
   }
 
-  await respRepo.save(examResponse);
+  const resp = await respRepo.save(examResponse);
+  return resp;
 };
 
 export const getAllResults = async (id: string) => {

@@ -84,13 +84,14 @@ export const getExamUtils = async (id: string, user: User) => {
   if (!exam) {
     throw new Error("Exam not found");
   }
+
+  if (user.role === "create") {
+    return exam;
+  }
   if (!exam.questions) {
     return null;
   }
   const modifiedQuestions = exam.questions.map((question: IQuestion) => {
-    if (user.role === "create") {
-      return question;
-    }
     const { correctOptions, answerText, ...rest } = question;
     console.log(correctOptions, answerText);
     return rest;

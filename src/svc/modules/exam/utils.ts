@@ -99,9 +99,24 @@ export const getExamUtils = async (id: string, user: User) => {
     return rest;
   });
 
+  const currentTime = new Date();
+  const examStartTime = new Date(exam.startTime);
+  let tag = QuizType.Upcoming;
+  const examEndTime = new Date(examStartTime.getTime() + exam.duration * 60 * 1000);
+  if (exam.startTime > currentTime) {
+    tag = QuizType.Upcoming;
+  } else if (examStartTime < currentTime && examEndTime > currentTime) {
+    tag = QuizType.Ongoing;
+  } else if (exam.results === false) {
+    tag = QuizType.Due;
+  } else {
+    tag = QuizType.Ok;
+  }
+
   return {
     ...exam,
     questions: modifiedQuestions,
+    tag: tag,
   };
 };
 

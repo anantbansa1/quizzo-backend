@@ -119,6 +119,7 @@ export const getExam = async (
   response.status(200).json({
     message: "exam fetched successfully",
     data: exam,
+    currentTime: new Date(),
   });
   next();
 };

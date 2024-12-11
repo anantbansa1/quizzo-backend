@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { Metadata } from "~src/svc/modules/common/entities/metadata";
 import {
+  IAdditionalAnswers,
   IAdditionalQuestions,
   IExamResponse,
   IQuestion,
@@ -38,6 +39,9 @@ export class Exam extends Metadata {
 export class ExamResponse extends Metadata {
   @Column({ type: "jsonb" })
   answers!: IExamResponse[];
+
+  @Column({ type: "jsonb", nullable: true })
+  additionalAnswers!: IAdditionalAnswers[];
 
   @ManyToOne(() => User, (user) => user.examResponses, { nullable: false })
   user!: User;

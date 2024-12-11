@@ -25,7 +25,6 @@ import {
   getAllExamsUtils,
   getAllResults,
   getExamUtils,
-  getFullResult,
   getResult,
   updateExamUtils,
 } from "~src/svc/modules/exam/utils";
@@ -47,10 +46,10 @@ export const createExam = async (
     return;
   }
 
-  const { title, start_time, end_time } = data;
+  const { title, start_time, end_time, additional_questions } = data;
   const user = response.locals.user;
 
-  await createExamUtil(title, start_time, end_time, user);
+  await createExamUtil(title, start_time, end_time, user, additional_questions);
   response.status(200).json({
     message: "user details updated successfully",
   });
@@ -134,7 +133,36 @@ export const attempt = async (
 
   const user = response.locals.user;
 
-  await attempExamUtils(data.responses, data.exam_id, user);
+  const examRepo = conf.DEFAULT_DATA_SOURCE.getRepository(Exam);
+  const exam = await examRepo.findOne({
+    where: {
+      id: parseInt(data.exam_id),
+    },
+  });
+  if (!exam) {
+    response.status(404).json({
+      message: "Exam not found",
+    });
+    next();
+    return;
+  }
+  const currentTime = new Date();
+  const examStartTime = new Date(exam.startTime);
+  const examEndTime = new Date(examStartTime.getTime() + exam.duration * 60 * 1000);
+
+  if (currentTime < examStartTime) {
+    response.status(401).json({ message: "Exam not started" });
+    next();
+    return;
+  }
+
+  if (currentTime > examEndTime) {
+    response.status(401).json({ message: "Exam already ended" });
+    next();
+    return;
+  }
+
+  await attempExamUtils(data.responses, data.additionalResponse, exam, user);
   response.status(200).json({
     message: "exam attempted succssfully",
   });
@@ -174,17 +202,10 @@ export const getResults = async (
     return;
   }
 
-  if (user.role === "teacher") {
+  if (user.role === "create") {
     const allResult = await getAllResults(data.id);
     response.status(200).json({
       data: allResult,
-    });
-    next();
-    return;
-  } else if (exam.results === true) {
-    const fullResult = await getFullResult(data.id, user);
-    response.status(200).json({
-      data: fullResult,
     });
     next();
     return;

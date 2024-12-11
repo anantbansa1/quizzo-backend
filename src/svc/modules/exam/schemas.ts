@@ -4,6 +4,7 @@ export const CreateExamSchema = z.object({
   title: z.string(),
   start_time: z.string(),
   end_time: z.string(),
+  additional_questions: z.string(),
 });
 
 export const UpdateExamSchema = z.object({
@@ -21,6 +22,7 @@ export const GetExamSchema = z.object({
 
 export const AttempExamSchema = z.object({
   responses: z.string(),
+  additionalResponse: z.string(),
   exam_id: z.string(),
 });
 

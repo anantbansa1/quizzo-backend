@@ -49,9 +49,16 @@ export const createExam = async (
   const { title, start_time, end_time, additional_questions } = data;
   const user = response.locals.user;
 
-  await createExamUtil(title, start_time, end_time, user, additional_questions);
+  const exam = await createExamUtil(
+    title,
+    start_time,
+    end_time,
+    user,
+    additional_questions,
+  );
   response.status(200).json({
-    message: "user details updated successfully",
+    message: "exam created successfully",
+    data: exam,
   });
   next();
 };
@@ -83,7 +90,7 @@ export const updateExam = async (
   );
 
   response.status(200).json({
-    message: "user details updated successfully",
+    message: "exam updated successfully",
   });
   next();
 };
@@ -107,9 +114,10 @@ export const getExam = async (
 
   const user = response.locals.user;
 
-  await getExamUtils(data.id, user);
+  const exam = await getExamUtils(data.id, user);
   response.status(200).json({
-    message: "user details updated successfully",
+    message: "exam fetched successfully",
+    data: exam,
   });
   next();
 };

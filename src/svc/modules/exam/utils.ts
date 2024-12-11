@@ -35,6 +35,7 @@ export const createExamUtil = async (
     duration,
     createdBy: user,
     additionalQuestions: parsedAdditionalQuestions,
+    questions: [],
   });
   const savedExam = await examRepo.save(exam);
   return savedExam;
@@ -69,7 +70,7 @@ export const updateExamUtils = async (
   exam.title = title;
   exam.startTime = startTime;
   exam.duration = duration;
-  exam.questions = parsedQuestions;
+  exam.questions = parsedQuestions ?? [];
   exam.additionalQuestions = parsedAdditionalQuestions;
 
   await examRepo.save(exam);

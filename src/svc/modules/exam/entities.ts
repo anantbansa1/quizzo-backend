@@ -10,7 +10,7 @@ import { User } from "~src/svc/modules/users/entities";
 
 @Entity({ name: "exam" })
 export class Exam extends Metadata {
-  @Column({ type: "jsonb" })
+  @Column({ type: "jsonb", nullable: true })
   questions?: IQuestion[] | null;
 
   @Column({ type: "varchar" })

@@ -179,6 +179,7 @@ export const attempt = async (
   response.status(200).json({
     message: "exam attempted succssfully",
     date: resp,
+    current_time: currentTime,
   });
   next();
 };

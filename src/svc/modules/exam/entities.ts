@@ -19,7 +19,7 @@ export class Exam extends Metadata {
   @Column({ type: "timestamp" })
   startTime!: Date;
 
-  @Column({ type: "timestamp" })
+  @Column({ type: "integer" })
   duration!: number;
 
   @Column({ type: "boolean", default: false })

@@ -6,6 +6,8 @@ import {
   IExamResponse,
   IQuestion,
   IResults,
+  QuizType,
+  returnType,
 } from "~src/svc/modules/exam/types";
 import { User } from "~src/svc/modules/users";
 
@@ -305,7 +307,7 @@ export const getResult = async (id: string, user: User) => {
 };
 
 export const getAllExamsUtils = async (user: User) => {
-  const userExams = await respRepo.find({
+  const userResponses = await respRepo.find({
     where: {
       user: {
         id: user.id,
@@ -322,7 +324,29 @@ export const getAllExamsUtils = async (user: User) => {
       },
     },
   });
-  return [...userExams, ...teacherExams];
+  const userExams: Exam[] = [];
+  userResponses.forEach((response) => {
+    userExams.push(response.exam);
+  });
+
+  const exams = [...userExams, ...teacherExams];
+
+  const returnExam: returnType[] = [];
+  exams.forEach((exam) => {
+    const currentTime = new Date();
+    const examStartTime = new Date(exam.startTime);
+    const examEndTime = new Date(examStartTime.getTime() + exam.duration * 60 * 1000);
+    if (exam.startTime > currentTime) {
+      returnExam.push({ ...exam, tag: QuizType.Upcoming });
+    } else if (examStartTime < currentTime && examEndTime > currentTime) {
+      returnExam.push({ ...exam, tag: QuizType.Ongoing });
+    } else if (exam.results === false) {
+      returnExam.push({ ...exam, tag: QuizType.Due });
+    } else {
+      returnExam.push({ ...exam, tag: QuizType.Ok });
+    }
+  });
+  return returnExam;
 };
 
 export const deleteExamUtils = async (id: string) => {

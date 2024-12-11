@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Exam } from "~src/svc/modules/exam/entities";
 import {
   AttempExamSchema,
   CreateExamSchema,
@@ -47,4 +48,15 @@ export interface IResults {
   additionalAnswers: IAdditionalAnswers[];
   user: User;
   marks: string;
+}
+
+export enum QuizType {
+  Upcoming = "upcoming",
+  Due = "no_result",
+  Ok = "complete",
+  Ongoing = "ongoing",
+}
+
+export interface returnType extends Exam {
+  tag: string;
 }

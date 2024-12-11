@@ -36,7 +36,6 @@ export interface IExamResponse {
   questionId: string;
   selectedOptions: string[];
   answerText: string;
-  additionalAnswers: string;
 }
 
 export interface IAdditionalAnswers {

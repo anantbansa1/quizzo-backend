@@ -49,23 +49,27 @@ export const updateExamUtils = async (
   id: string,
   additional_questions: string,
 ) => {
+  console.log(1);
   const parsedQuestions = JSON.parse(questions) as IQuestion[];
   const parsedAdditionalQuestions: IAdditionalQuestions[] = JSON.parse(
     additional_questions,
   ) as IAdditionalQuestions[];
-
+  console.log(2);
   const startTime = new Date(start_time);
   const endTime = new Date(end_time);
   const duration = Math.round((endTime.getTime() - startTime.getTime()) / (1000 * 60));
-
+  console.log(3);
+  console.log(parseInt(id));
   const exam = await examRepo.findOne({
     where: { id: parseInt(id) },
     relations: ["createdBy"],
   });
+  console.log(3);
 
   if (!exam) {
     throw new Error("Exam not found");
   }
+  console.log(title, duration, startTime, parsedQuestions, parsedAdditionalQuestions);
 
   exam.title = title;
   exam.startTime = startTime;
@@ -73,7 +77,8 @@ export const updateExamUtils = async (
   exam.questions = parsedQuestions ?? [];
   exam.additionalQuestions = parsedAdditionalQuestions;
 
-  await examRepo.save(exam);
+  const returnExam = await examRepo.save(exam);
+  return returnExam;
 };
 
 export const getExamUtils = async (id: string, user: User) => {

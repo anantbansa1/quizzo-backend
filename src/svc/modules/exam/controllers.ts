@@ -80,17 +80,18 @@ export const updateExam = async (
     return;
   }
 
-  await updateExamUtils(
+  const exam = await updateExamUtils(
     data.questions,
+    data.title,
     data.start_time,
     data.end_time,
     data.id,
-    data.questions,
     data.additional_questions,
   );
 
   response.status(200).json({
     message: "exam updated successfully",
+    data: exam,
   });
   next();
 };

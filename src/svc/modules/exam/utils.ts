@@ -138,7 +138,6 @@ export const attempExamUtils = async (
 };
 
 export const getAllResults = async (id: string) => {
-  // Fetch all responses for the given exam
   const responses = await respRepo.find({
     where: {
       exam: {
@@ -150,7 +149,6 @@ export const getAllResults = async (id: string) => {
     },
   });
 
-  // Fetch the original questions and answers for the given exam
   const originalAnswers = await examRepo.findOne({
     where: {
       id: parseInt(id),
@@ -223,7 +221,7 @@ export const getAllResults = async (id: string) => {
 };
 
 export const getResult = async (id: string, user: User) => {
-  const results = await respRepo.find({
+  const responses = await respRepo.find({
     where: {
       exam: {
         id: parseInt(id),
@@ -232,8 +230,80 @@ export const getResult = async (id: string, user: User) => {
         id: user.id,
       },
     },
+    relations: {
+      user: true,
+    },
   });
-  return results;
+
+  const originalAnswers = await examRepo.findOne({
+    where: {
+      id: parseInt(id),
+    },
+  });
+
+  if (originalAnswers?.questions) {
+    const results: IResults[] = [];
+
+    responses.forEach((response) => {
+      let totalMarks = 0;
+
+      response.answers.forEach((examResponse: IExamResponse) => {
+        const question = originalAnswers.questions?.find(
+          (q) => q.questionId === examResponse.questionId,
+        );
+
+        if (!question) {
+          return;
+        }
+
+        const { questionType, correctOptions, marks, answerText } = question;
+
+        switch (questionType) {
+          case 0:
+            if (
+              examResponse.selectedOptions.length === 1 &&
+              examResponse.selectedOptions[0] === correctOptions[0]
+            ) {
+              totalMarks += marks;
+            }
+            break;
+
+          case 1:
+            if (
+              examResponse.selectedOptions.length === correctOptions.length &&
+              examResponse.selectedOptions.every((option) =>
+                correctOptions.includes(option),
+              )
+            ) {
+              totalMarks += marks;
+            }
+            break;
+
+          case 2:
+            if (
+              examResponse.answerText?.trim().toLowerCase() ===
+              answerText.trim().toLowerCase()
+            ) {
+              totalMarks += marks;
+            }
+            break;
+
+          default:
+            console.warn(`Unhandled question type: ${questionType}`);
+        }
+      });
+
+      results.push({
+        additionalAnswers: response.additionalAnswers || [],
+        user: response.user,
+        marks: totalMarks.toString(),
+      });
+    });
+
+    return results;
+  }
+
+  return null;
 };
 
 export const getAllExamsUtils = async (user: User) => {

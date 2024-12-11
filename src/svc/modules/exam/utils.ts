@@ -56,7 +56,7 @@ export const updateExamUtils = async (
 
   const startTime = new Date(start_time);
   const endTime = new Date(end_time);
-  const duration = endTime.getTime() - startTime.getTime();
+  const duration = Math.round((endTime.getTime() - startTime.getTime()) / (1000 * 60));
 
   const exam = await examRepo.findOne({
     where: { id: parseInt(id) },

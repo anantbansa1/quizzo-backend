@@ -134,7 +134,7 @@ export const attempt = async (
     data = AttempExamSchema.parse(request.body);
   } catch (e: unknown) {
     response.status(400).json({
-      message: "Data validation failed",
+      message: `Data validation failed${request.body}`,
       errors: (e as Error).message,
     });
     next();
